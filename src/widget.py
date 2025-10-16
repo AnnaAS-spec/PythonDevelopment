@@ -1,28 +1,6 @@
 from datetime import datetime
-
-def get_mask_card_number(card_number: str) -> str:
-    """
-    Возвращает замаскированный номер банковской карты.
-
-    Отображаются первые 6 и последние 4 цифры, остальная часть
-    заменяется звездочками. Формат результата: XXXX XX** **** XXXX.
-    """
-    first = card_number[:6]
-    last = card_number[-4:]
-    masked_middle = "** ****"
-    masked = f"{first[:4]} {first[4:6]}{masked_middle} {last}"
-    return masked
-
-
-def get_mask_account(account_number: str) -> str:
-    """
-    Возвращает замаскированный номер банковского счёта.
-
-    Отображаются только последние 4 цифры, перед ними ставятся две
-    звездочки. Формат результата: **XXXX.
-    """
-    last = account_number[-4:]
-    return f"**{last}"
+from masks import get_mask_card_number
+from masks import get_mask_account
 
 
 def mask_account_card(data: str) -> str:
@@ -40,7 +18,7 @@ def mask_account_card(data: str) -> str:
     """
     # Разделяем строку на слова
     parts = data.split()
-    number = parts[-1]         # последний элемент — это номер
+    number = parts[-1]  # последний элемент — это номер
     name = " ".join(parts[:-1])  # всё до номера — название
 
     if name.lower().startswith("счет"):
@@ -49,6 +27,7 @@ def mask_account_card(data: str) -> str:
         masked = get_mask_card_number(number)
 
     return f"{name} {masked}"
+
 
 def get_date(date_str: str) -> str:
     """
@@ -65,5 +44,5 @@ def get_date(date_str: str) -> str:
         >>> get_date("2024-03-11T02:26:18.671407")
         '11.03.2024'
     """
-    dt = datetime.fromisoformat(date_str)   # превращаем ISO строку в datetime
-    return dt.strftime("%d.%m.%Y")          # форматируем в нужный вид
+    dt = datetime.fromisoformat(date_str)  # превращаем ISO строку в datetime
+    return dt.strftime("%d.%m.%Y")  # форматируем в нужный вид
